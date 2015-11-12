@@ -1,18 +1,49 @@
-    var Attraction = function(index, cwAdj, cwTime, ccAdj, ccTime){
-        this.index  = index;
-        this.cwAdj  = cwAdj;
-        this.cwTime = cwTime;
-        this.ccAdj  = ccAdj;
-        this.ccTime = ccTime;
+var totalAttractions = prompt("Number of attractions?");
+var walkingTimeString = prompt("Enter the time between each attraction in whole minute integers separated with spaces");
+var walkingTimes = walkingTimeString.split(' ').map(function(element){return parseInt(element)});
+
+var Attraction = function (index, cwAdj, cwTime, ccAdj, ccTime) {
+    this.index = index;
+    this.cwAdj = cwAdj;
+    this.cwTime = cwTime;
+    this.ccAdj = ccAdj;
+    this.ccTime = ccTime;
+};
+
+var park = (function(tot, wlkArr){
+
+    var p = [];
+
+    var isFirst = function(m, n){
+        return m===0;
     };
 
-    var park = [];
+    var isLast = function(m, n){
+        return m===n;
+    };
 
-    park.push((new Attraction(0,5,8,1,4)),
-        (new Attraction(1,0,4,2,2)),
-        (new Attraction(2,1,2,3,5)),
-        (new Attraction(3,2,5,4,1)),
-        (new Attraction(4,3,1,5,3)),
-        (new Attraction(5,4,3,0,8)));
+    for (var i=0; i<tot; i++) {
+        if (isFirst(i, tot)) {
+            p.push(new Attraction(i, tot - 1, wlkArr[tot - 1], i + 1, wlkArr[i]));
+        }
+        else if (isLast(i, tot)) {
+            p.push(new Attraction(i, i - 1, wlkArr[i - 1], 0, wlkArr[i]));
+        }
+        else {
+            p.push(new Attraction(i, i - 1, wlkArr[i - 1], i + 1, wlkArr[i]));
+        }
+    }
 
-    console.log('park', park);
+    return p;
+})(totalAttractions, walkingTimes);
+
+
+
+//var numberOfVisitors = prompt('Enter the number of visitors');
+//
+//var Visitor = function (numAtr, atrArr) {
+//    this.numAtr = numAtr;
+//    this.atrArr = atrArr;
+//};
+
+console.log('park', park);
