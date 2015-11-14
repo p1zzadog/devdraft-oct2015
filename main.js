@@ -1,12 +1,16 @@
-//var allInput = input.split('\n');
+
+
+var allInput = input.split('\n');
 
 
 
 var toInt = function(string){return parseInt(string)};
 
-var totalAttractions = parseInt(prompt("Number of attractions?"));
-var walkingTimes = prompt("Enter the time between each attraction in whole minute integers separated with spaces")
-    .split(' ').map(toInt);
+var totalAttractions = parseInt(allInput[0].trim());
+var walkingTimes = allInput[1]
+    .trim()
+    .split(' ')
+    .map(toInt);
 
 var Attraction = function (index, cwAdj, cwTime, ccAdj, ccTime) {
     this.index = index;
@@ -103,7 +107,7 @@ var transpose = function(array){
 
 var cwTimeTable = transpose(ccTimeTable);
 
-var visitorTotal = parseInt(prompt('Enter the number of visitors'));
+var visitorTotal = parseInt(allInput[2].trim());
 
 var Visitor = function (attrNumber, attrItinerary, timeItinerary) {
     this.attrNumber = attrNumber;
@@ -132,8 +136,9 @@ var allVisitors = (function(vT){
     };
 
     for (var i=0; i<vT; i++){
-        num = parseInt(prompt("how many attractions does this guest visit?"));
-        attractions = prompt("which attractions?")
+        num = parseInt(allInput[3 + i*2].trim());
+        attractions = allInput[4 + i*2]
+            .trim()
             .split(' ')
             .map(toInt);
         time = determineRouteTime(attractions);
@@ -144,6 +149,7 @@ var allVisitors = (function(vT){
 })(visitorTotal);
 
 allVisitors.forEach(function(visitor){
-   console.log(visitor.timeItinerary);
+    //process.stdout.write(visitor.timeItinerary);
+    console.log(visitor.timeItinerary);
 });
 
