@@ -1,6 +1,12 @@
-var totalAttractions = prompt("Number of attractions?");
+//var allInput = input.split('\n');
+
+
+
+var toInt = function(string){return parseInt(string)};
+
+var totalAttractions = parseInt(prompt("Number of attractions?"));
 var walkingTimes = prompt("Enter the time between each attraction in whole minute integers separated with spaces")
-    .split(' ').map(function(element){return parseInt(element)});
+    .split(' ').map(toInt);
 
 var Attraction = function (index, cwAdj, cwTime, ccAdj, ccTime) {
     this.index = index;
@@ -31,9 +37,6 @@ var park = (function(tA, wlkArr){
     }
     return p;
 })(totalAttractions, walkingTimes);
-
-console.log('park: ', park);
-
 
 // strategy: create two(counterclockwise and clockwise) 2-dimensional arrays representing all possible paths
 // outer array index represents origin of travel
@@ -97,66 +100,50 @@ var transpose = function(array){
         });
     });
 };
+
 var cwTimeTable = transpose(ccTimeTable);
 
-console.log('ccTimeTable: ', ccTimeTable);
-console.log('cwTimeTable: ', cwTimeTable);
+var visitorTotal = parseInt(prompt('Enter the number of visitors'));
 
-
-var visitorTotal = prompt('Enter the number of visitors');
-
-var Visitor = function (attrNumber, attrItinerary) {
+var Visitor = function (attrNumber, attrItinerary, timeItinerary) {
     this.attrNumber = attrNumber;
     this.attrItinerary = attrItinerary;
+    this.timeItinerary = timeItinerary;
 };
 
-var allVisitors = (function(vT, pk){
+var allVisitors = (function(vT){
     var num;
     var attractions;
+    var time;
     var arr = [];
-    var toInt = function(string){return parseInt(string)};
-    var parkItemIndex = function(attractionIndex){
-        return pk.findIndex(function(attraction){
-            return attraction.index===attractionIndex;
-        });
+    var bestRoute = function(prev, current, dex, ray){
+        if (dex+1 === ray.length){
+            return prev;
+        }
+        else if (ccTimeTable[ray[dex]][ray[dex+1]] <= cwTimeTable[ray[dex]][ray[dex+1]]){
+            return prev + ccTimeTable[ray[dex]][ray[dex+1]];
+        }
+        else{
+            return prev + cwTimeTable[ray[dex]][ray[dex+1]]
+        }
     };
-    var getAttraction = function(parkItemIndex){return p[parkItemIndex]};
-    for (var i=0; i<tot; i++){
+    var determineRouteTime = function(route){
+      return route.reduce(bestRoute,0);
+    };
+
+    for (var i=0; i<vT; i++){
         num = parseInt(prompt("how many attractions does this guest visit?"));
         attractions = prompt("which attractions?")
             .split(' ')
-            .map(toInt)
-            .map(parkItemIndex)
-            .map(getAttraction);
-        arr.push(new Visitor(num, attractions));
+            .map(toInt);
+        time = determineRouteTime(attractions);
+
+        arr.push(new Visitor(num, attractions, time));
     }
     return arr;
-})(visitorTotal, park);
+})(visitorTotal);
 
-console.log('park: ', park);
-console.log('allVisitors: ', allVisitors);
-//
-//var computeOutput = function(aV, pk, tA){
-//
-//    var out = [];
-//
-//    var ccTime = function(attrA, attrB) {
-//        for (var i=attrA.index; i<)
-//    };
-//
-//    var cwTime = function(attrA, attrB) {
-//
-//    };
-//
-//    out = aV.map(function(visitor){
-//       for (var i=0; i<visitor.numAtr; i++){
-//       //    need to write a utility function to compute times between attractions
-//       //    2 inputs, A-->B
-//       //    1 output, fastest time
-//       }
-//    });
-//
-//
-//
-//    return o;
-//};
+allVisitors.forEach(function(visitor){
+   console.log(visitor.timeItinerary);
+});
+
