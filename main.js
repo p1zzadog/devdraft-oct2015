@@ -1,8 +1,4 @@
-
-
 var allInput = input.split('\n');
-
-
 
 var toInt = function(string){return parseInt(string)};
 
@@ -95,7 +91,7 @@ var ccTimeTable = (function(){
     return ccTemp;
 })();
 
-// easiest to produce CW array by transposing CC array
+// easiest to produce CW array by matrix transposing CC array
 var transpose = function(array){
     var arr = [];
     return arr = array[0].map(function(col, i){
